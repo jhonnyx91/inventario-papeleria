@@ -2,6 +2,7 @@ package com.papeleria.inventario.controller;
 
 import com.papeleria.inventario.dto.PrecioProductoResponse;
 import com.papeleria.inventario.dto.ProductoRequest;
+import com.papeleria.inventario.dto.ProductoUpdate;
 import com.papeleria.inventario.service.InventarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,17 @@ public class ProductoController {
     @ResponseStatus(HttpStatus.CREATED) // Devuelve un código HTTP 201 (Creado) automático si todo sale bien
     public void crearProducto(@RequestBody ProductoRequest request) {
         inventarioService.guardarProducto(request);
+    }
+
+    @PatchMapping("/{codigo}") // PATCH http://localhost:8080/api/productos/{codigo}
+    public ProductoUpdate actualizarParcial(@PathVariable String codigo, @RequestBody ProductoUpdate dto) {
+        return inventarioService.actualizarProductoParcial(codigo, dto);
+    }
+
+    @DeleteMapping("/{codigo}") // Ruta: DELETE http://localhost:8080/api/productos/{codigo}
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Devuelve un código HTTP 204 (No Content) estándar para borrados exitosos
+    public void eliminar(@PathVariable String codigo) {
+        inventarioService.eliminarProducto(codigo);
     }
 }
 

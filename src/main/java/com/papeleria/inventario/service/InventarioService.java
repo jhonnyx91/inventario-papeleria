@@ -2,10 +2,13 @@ package com.papeleria.inventario.service;
 
 import com.papeleria.inventario.dto.PrecioProductoResponse;
 import com.papeleria.inventario.dto.ProductoRequest;
+import com.papeleria.inventario.dto.ProductoUpdate;
 import com.papeleria.inventario.exception.ProductoNoEncontradoException;
 import com.papeleria.inventario.model.Producto;
 import com.papeleria.inventario.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class InventarioService {
@@ -35,6 +38,34 @@ public class InventarioService {
 
         // 2. Lo guardamos en la base de datos local
         productoRepository.save(nuevoProducto);
+    }
+
+    public ProductoUpdate actualizarProductoParcial(String codigo, ProductoUpdate dto) {
+        Producto productoExistente = productoRepository.findById(codigo)
+                .orElseThrow(() -> new ProductoNoEncontradoException(codigo));
+
+        // 💡 Si 'dto.nombre()' no es nulo, actualiza. Si es nulo, deja el nombre existente.
+        Optional.ofNullable(dto.nombre()).ifPresent(productoExistente::setNombre);
+        Optional.ofNullable(dto.precioVenta()).ifPresent(productoExistente::setPrecioVenta);
+        Optional.ofNullable(dto.stock()).ifPresent(productoExistente::setStock);
+
+        productoRepository.save(productoExistente);
+
+        // Devolvemos el estado final real del producto mezclando lo viejo y lo nuevo
+        return new ProductoUpdate(
+                productoExistente.getNombre(),
+                productoExistente.getPrecioVenta(),
+                productoExistente.getStock()
+        );
+    }
+
+    public void eliminarProducto(String codigo) {
+        // 1. Validamos la existencia. Si no está, frena de inmediato y lanza el error 404
+        Producto producto = productoRepository.findById(codigo)
+                .orElseThrow(() -> new ProductoNoEncontradoException(codigo));
+
+        // 2. Si existía, lo borramos físicamente de la base de datos local
+        productoRepository.delete(producto);
     }
 
 }
