@@ -1,0 +1,17 @@
+============================================================
+📋 CONTEXTO DE DESARROLLO: SISTEMA DE INVENTARIO PAPELERÍA
+============================================================
+- Idioma: Español.
+- Stack Tecnológico: Java 17, Spring Boot (Última versión estable), Maven, H2 Database local (modo archivo persistente en ./data/), Lombok, JPA/Hibernate.
+- Repositorio: Conectado a GitHub personal (jhonnyx91) en la rama actual de trabajo: 'feature/listar-inventario'.
+- Estructura del Proyecto (com.papeleria.inventario):
+  ├── controller/ -> ProductoController (catálogo), VentaController (transacciones)
+  ├── dto/ -> ProductoRequest (POST), ProductoUpdate (PATCH parcial con clases envolventes Double/Integer), ProductoResponse (GET total de 4 campos), VentaRequest y DetalleVentaRequest (Carrito multiproducto).
+  ├── exception/ -> ProductoNoEncontradoException, ErrorResponse, GlobalExceptionHandler (@RestControllerAdvice interceptando errores 404).
+  ├── model/ -> Producto (Entidad tradicional mutable con @Id manual), Venta (Entidad de auditoría histórica con @Id automático secuencial).
+  └── repository/ -> ProductoRepository (JpaRepository<Producto, String>), VentaRepository (JpaRepository<Venta, Long>).
+- Capas de Servicio independientes creadas y anotadas con @Service:
+  1. InventarioService: Maneja CRUD seguro de productos usando Java Streams y Optional (map, orElseThrow, sorted por nombre alfabético).
+  2. VentaService: Maneja lógica multiproducto con @Transactional, validando stock individualmente, restando existencias y guardando la Factura Maestra histórica calculando el dinero total entrante.
+- Estado Actual: El servidor compila y enciende limpio (Status 200). Los métodos POST, GET, PATCH parcial y DELETE fueron probados con éxito rotundo en Postman.
+============================================================

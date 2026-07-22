@@ -22,9 +22,9 @@ public class ProductoController {
     }
 
     // Ruta para consultar: GET http://localhost:8080/api/productos/{codigo}/precio
-    @GetMapping("/{codigo}/precio")
-    public PrecioProductoResponse obtenerPrecio(@PathVariable String codigo) {
-        return inventarioService.obtenerPrecioProducto(codigo);
+    @GetMapping("/{codigo}")
+    public ProductoResponse obtenerPorCodigo(@PathVariable String codigo) {
+        return inventarioService.obtenerProductoPorCodigo(codigo);
     }
 
     @PostMapping // Ruta: POST http://localhost:8080/api/productos

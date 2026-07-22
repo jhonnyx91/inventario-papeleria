@@ -1,6 +1,5 @@
 package com.papeleria.inventario.service;
 
-import com.papeleria.inventario.dto.PrecioProductoResponse;
 import com.papeleria.inventario.dto.ProductoRequest;
 import com.papeleria.inventario.dto.ProductoUpdate;
 import com.papeleria.inventario.dto.ProductoResponse;
@@ -24,10 +23,15 @@ public class InventarioService {
         this.productoRepository = productoRepository;
     }
 
-    public PrecioProductoResponse obtenerPrecioProducto(String codigo) {
+    public ProductoResponse obtenerProductoPorCodigo(String codigo) {
         return productoRepository.findById(codigo)
-                // Transformamos el Producto directamente en nuestro DTO Record usando su constructor compacto
-                .map(producto -> new PrecioProductoResponse(producto.getPrecioVenta()))
+                // 🚀 Transformamos la entidad en el DTO completo de 4 campos
+                .map(producto -> new ProductoResponse(
+                        producto.getCodigoBarras(),
+                        producto.getNombre(),
+                        producto.getPrecioVenta(),
+                        producto.getStock()
+                ))
                 .orElseThrow(() -> new ProductoNoEncontradoException(codigo));
     }
 
