@@ -3,12 +3,16 @@ package com.papeleria.inventario.service;
 import com.papeleria.inventario.dto.PrecioProductoResponse;
 import com.papeleria.inventario.dto.ProductoRequest;
 import com.papeleria.inventario.dto.ProductoUpdate;
+import com.papeleria.inventario.dto.ProductoResponse;
 import com.papeleria.inventario.exception.ProductoNoEncontradoException;
 import com.papeleria.inventario.model.Producto;
 import com.papeleria.inventario.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InventarioService {
@@ -68,5 +72,17 @@ public class InventarioService {
         productoRepository.delete(producto);
     }
 
+    public List<ProductoResponse> listarTodoElInventario() {
+        return productoRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Producto::getNombre))
+                .map(p -> new ProductoResponse(
+                        p.getCodigoBarras(),
+                        p.getNombre(),
+                        p.getPrecioVenta(),
+                        p.getStock()
+                ))
+                .collect(Collectors.toList());
+    }
 }
 

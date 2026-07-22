@@ -2,10 +2,13 @@ package com.papeleria.inventario.controller;
 
 import com.papeleria.inventario.dto.PrecioProductoResponse;
 import com.papeleria.inventario.dto.ProductoRequest;
+import com.papeleria.inventario.dto.ProductoResponse;
 import com.papeleria.inventario.dto.ProductoUpdate;
 import com.papeleria.inventario.service.InventarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -40,5 +43,11 @@ public class ProductoController {
     public void eliminar(@PathVariable String codigo) {
         inventarioService.eliminarProducto(codigo);
     }
+
+    @GetMapping // Ruta: GET http://localhost:8080/api/productos
+    public List<ProductoResponse> listarTodos() {
+        return inventarioService.listarTodoElInventario();
+    }
+
 }
 
