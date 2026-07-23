@@ -1,5 +1,5 @@
 ============================================================
-📋 CONTEXTO DE DESARROLLO: SISTEMA DE INVENTARIO PAPELERÍA
+📋 CONTEXTO DE DESARROLLO: SISTEMA DE INVENTARIO PAPELERÍA para la ia
 ============================================================
 - Idioma: Español.
 - Stack Tecnológico: Java 17, Spring Boot (Última versión estable), Maven, H2 Database local (modo archivo persistente en ./data/), Lombok, JPA/Hibernate.
